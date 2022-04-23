@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.Date;
+import java.util.*;
 public class Expense_Tracker {
     public static void main(String[]args){
     Scanner input = new Scanner (System.in);
@@ -13,37 +11,41 @@ public class Expense_Tracker {
           String option = input.next();
           exp.Options(option);
        }
-
     }
-
 }
 
 class Methods {
-    private ArrayList<Object> title = new ArrayList<>();
-    String listTitle;
-    private double amount;
-    private String tags;
-
+    private ArrayList<String> listArray = new ArrayList<>();
     public Methods(String listTitle, double amount, String tags) {
-        this.listTitle = listTitle;
-        this.amount = amount;
-        this.tags = tags;
+    }
+    public void Option1 (){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter in this order: title, amount, tag ");
+        for (int row = 0; row < listArray.size(); row++) {
+                listArray.add(input.next());
+
+        }
+    }
+    public void Option2(){
+        if (listArray .isEmpty()){
+            System.out.println("Your expense list is empty");}
+        else {
+            System.out.println("Your expenses are as follows: ");
+            for (int row = 0; row < listArray.size(); row++) {
+                    System.out.print(listArray.get(row) + " ");
+            }
+        }
     }
     public  void Options (String option){
+        if (option.equals("1"))
+            Option1();
+        if (option.equals("2"))
+            Option2();
         if(option.equals("4"))
             System.exit(0);
         else
             System.out.println("error");
     }
 
-    public String getTitle() {
-        for (int i = 0; i < title.size(); i++) {
-            if (title.contains(listTitle)) ;
-        }
-        return listTitle;
-    }
 
-    public void setTitle(String listTitle) {
-        title.add(listTitle);
-    }
 }
