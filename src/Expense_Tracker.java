@@ -50,7 +50,7 @@ class Methods {
             for (int i = 0; i < collection.get(1).size(); i++) {
                     System.out.print( collection.get(0).get(i) + ": "
                             + collection.get(1).get(i) +"("
-                            + collection.get(2).get(i)+ ")" + "\n" + collection.get(3).get(i));
+                            + collection.get(2).get(i)+ ")" + collection.get(3).get(i));
                     System.out.println();
             }
         }
