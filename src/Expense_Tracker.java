@@ -1,5 +1,3 @@
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 public class Expense_Tracker {
     public static void main(String[]args){
@@ -16,14 +14,25 @@ public class Expense_Tracker {
 }
 
 class Methods {
-    private static ArrayList<String> listTitle = new ArrayList<>();
-    private ArrayList<String> listDate = new ArrayList<>();
-    private ArrayList<String> listAmount = new ArrayList<>();
+    private ArrayList<String> listTitle = new ArrayList<>();
+    private ArrayList<Date> listDate = new ArrayList<>();
+    private ArrayList<Double> listAmount = new ArrayList<>();
     private ArrayList<String> listTag = new ArrayList<>();
-    private ArrayList<ArrayList<String>> collection = new ArrayList();
-
 
     public Methods(String listTitle, double amount, String tags) {
+    }
+
+    public  void Options (String option){
+        if (option.equals("1"))
+            Option1();
+        else if (option.equals("2"))
+            Option2();
+        else if (option.equals("3"))
+            Option3();
+        else if(option.equals("4"))
+            System.exit(0);
+        else
+            System.out.println("error");
     }
     public void Option1 (){
         Scanner input = new Scanner(System.in);
@@ -33,54 +42,48 @@ class Methods {
         System.out.println("Enter in this order: title, amount, tag ");
         for (int i = 1; i <= number; i++) {
             listTitle.add(input.next()) ;
-            listAmount.add(input.next());
+            listAmount.add(input.nextDouble());
             listTag.add(input.next());
-            listDate.add(now.toString());
-            collection.add(listTitle);
-            collection.add(listAmount);
-            collection.add(listTag);
-            collection.add(listDate);
+            listDate.add(now);
         }
     }
-    public void Option2(){
-        if (listTag.isEmpty() ){
-            System.out.println("Your expense list is empty");}
+    public void Option2() {
+        if (listTag.isEmpty())
+            System.out.println("Your expense list is empty");
         else {
-            System.out.println("Your expenses are as follows: ");
-            for (int i = 0; i < collection.get(1).size(); i++) {
-                    System.out.print( collection.get(0).get(i) + ": "
-                            + collection.get(1).get(i) +"("
-                            + collection.get(2).get(i)+ ")" + collection.get(3).get(i));
-                    System.out.println();
-            }
+            System.out.println("----------------------------------------------------------------------------------");
+            System.out.printf("%-20s%-15s%-15s%-10s", "TITLE", "AMOUNT", "TAG", "DATE");
+            System.out.println();
+            System.out.println("----------------------------------------------------------------------------------");
+            setExpense();
+            System.out.println("----------------------------------------------------------------------------------");
         }
     }
     public void Option3(){
-        Scanner input = new Scanner(System.in);
-        System.out.println("Input expense to delete");
-        String search = input.next();
-        for (int i = 0, j; i < collection.size(); i++) {
-            if ( listTitle.contains(search) || listAmount.contains(search)
-                    || listDate.contains(search) || listTag.contains(search)) {
-                j = listTitle.indexOf(search);
-                collection.get(0).remove(search);
-                collection.get(1).remove(j);
-                collection.get(2).remove(j);
-                collection.get(3).remove(j);
-            }
+        if (listTitle.isEmpty())
+            System.out.println("Your expense list is empty");
+        else
+            deleteSearch();
+    }
+    public void setExpense(){
+        for (int i = 0; i < listTitle.size(); i++) {
+            System.out.printf("%-20s$%-15.2f%-15s%-10s", listTitle.get(i),listAmount.get(i),
+                    listTag.get(i), listDate.get(i));
+            System.out.println();
         }
     }
-    public  void Options (String option){
-        if (option.equals("1"))
-            Option1();
-        else if (option.equals("2"))
-            Option2();
-       else if (option.equals("3"))
-            Option3();
-       else if(option.equals("4"))
-            System.exit(0);
-
-        else
-            System.out.println("error");
+    public void deleteSearch(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Input title of expense to delete");
+        for (int i = 0, j; i < listTitle.size(); i++) {
+            String search = input.next();
+            if (listTitle.contains(search)) {
+                j = listTitle.indexOf(search);
+                listTitle.remove(search);
+                listAmount.remove(j);
+                listTag.remove(j);
+                listDate.remove(j);
+            }
+        }
     }
 }
