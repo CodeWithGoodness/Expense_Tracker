@@ -67,7 +67,7 @@ class Methods {
             System.out.println("----------------------------------------------------------------------------------");
             setExpense();
             System.out.println("----------------------------------------------------------------------------------");
-            System.out.println("Total Amount: "+ Sum());
+            Sum();
         }
     }
     public void OptionDelete(){
@@ -90,7 +90,6 @@ class Methods {
             String search = input.next();
             if (listTitle.contains(search)) {
                 j = listTitle.indexOf(search);
-                System.out.println(j);
                 listTitle.remove(search);
                 listDescription.remove(j);
                 listAmount.remove(j);
@@ -98,14 +97,16 @@ class Methods {
             }
             else if (search.equals("1")){
                 Display();
-            break;}
+            }
             else
                 System.out.println("Expense not found");
         }
     }
-    public double Sum(){
+    public void Sum(){
         for (int i = 0; i < listAmount.size(); i++) {
-            sum += listAmount.get(i);
-        }return sum;
+           sum += listAmount.get(i);
+        }
+        System.out.println("Total amount: " + sum);
+       sum = 0;
     }
 }
