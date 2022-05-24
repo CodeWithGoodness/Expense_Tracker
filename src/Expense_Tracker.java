@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.*;
 public class Expense_Tracker {  //for recording expenses
     public static void main(String[]args) {
@@ -6,20 +7,16 @@ public class Expense_Tracker {  //for recording expenses
         System.out.println("EXPENSE TRACKER");//Display
         while (true) {
                 exp.Display();
-
         }
     }
 }
 
-class Methods {
-    String option = "";
+class Methods implements Serializable{
     private ArrayList<String> listTitle = new ArrayList<>();
     private ArrayList<Date> listDate = new ArrayList<>();
     private ArrayList<Double> listAmount = new ArrayList<>();
     private ArrayList<String> listDescription = new ArrayList<>();
     int sum;
-    Methods(){
-    }
     public void Display(){
         System.out.println("What would you like to do? " +
                 "\n 1.Add an Expense \n 2.Check list of Expenses \n 3. Delete an Expense \n 4.Exit");
@@ -28,16 +25,22 @@ class Methods {
     public void Options (){
         Scanner input = new Scanner(System.in);
         String  option = input.next();
-        if (option.equals("1"))
-            OptionAdd();
-        else if (option.equals("2"))
-            OptionCheck();
-        else if (option.equals("3"))
-            OptionDelete();
-        else if(option.equals("4"))
-            System.exit(0);
-        else
-            System.out.println("Enter a number from 1-4");
+        switch (option){
+            case "1":
+                OptionAdd();
+                break;
+            case "2":
+                readData();
+                break;
+            case "3":
+                OptionDelete();
+                break;
+            case "4":
+                System.exit(0);
+                break;
+            default:
+                System.out.println("Enter a number from 1-4");
+        }
     }
     public void OptionAdd (){
         Scanner input = new Scanner(System.in);
@@ -45,29 +48,22 @@ class Methods {
         System.out.print("How many expenses do you want to add? ");
         try {
             int number = input.nextInt();
-            System.out.println("Enter in this order: title, Description, Amount ");
+            System.out.println("Enter in this order: Amount, title");
+            FileOutputStream fos = new FileOutputStream("C:\\Users\\HP/goodness.txt", true);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
             for (int i = 0; i < number; i++) {
-                    listTitle.add(input.next());
-                    listDescription.add(input.next());
                     listAmount.add(input.nextDouble());
+                    listTitle.add(input.next());
                     listDate.add(now);
-                }
+                oos.writeObject(listDate.get(i).toString() + ":  " + listTitle.get(i).toString() + "  " + listAmount.get(i) + "\n");
+            }
+            oos.flush();
+            oos.close();
         }
-        catch (Exception ex){
-            System.out.println("Invalid number");
-        }
-    }
-    public void OptionCheck() {
-        if (listTitle.isEmpty())
-            System.out.println("Your expense list is empty");
-        else {
-            System.out.println("----------------------------------------------------------------------------------");
-            System.out.printf("%-20s%-15s%-15s%-10s", "TITLE","DESCRIPTION", "AMOUNT", "DATE");
-            System.out.println();
-            System.out.println("----------------------------------------------------------------------------------");
-            setExpense();
-            System.out.println("----------------------------------------------------------------------------------");
-            Sum();
+        catch (InputMismatchException ex){
+            System.out.println("Error: Invalid input");
+        } catch (IOException e){
+            e.printStackTrace();
         }
     }
     public void OptionDelete(){
@@ -75,13 +71,6 @@ class Methods {
             System.out.println("Your expense list is empty");
         else
             deleteSearch();
-    }
-    public void setExpense(){
-        for (int i = 0; i < listTitle.size(); i++) {
-            System.out.printf("%-20s%-15s$%-15.2f%-10s", listTitle.get(i),
-                    listDescription.get(i),listAmount.get(i), listDate.get(i));
-            System.out.println();
-        }
     }
     public void deleteSearch(){
         Scanner input = new Scanner(System.in);
@@ -91,7 +80,6 @@ class Methods {
             if (listTitle.contains(search)) {
                 j = listTitle.indexOf(search);
                 listTitle.remove(search);
-                listDescription.remove(j);
                 listAmount.remove(j);
                 listDate.remove(j);
             }
@@ -108,5 +96,26 @@ class Methods {
         }
         System.out.println("Total amount: " + sum);
        sum = 0;
+    }
+    public  void readData(){
+        try{
+            File newFile = new File("C:\\Users\\HP/goodness.txt");
+            FileInputStream fis = new FileInputStream("C:\\Users\\HP/goodness.txt");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            if (newFile.length() == 0){
+                System.out.println("No recorded expenses yet");
+            }else {
+                int i;
+                while ((i = fis.read())!= -1)
+                    System.out.print((char) i);
+               // ArrayList listTitle2 = (ArrayList <Methods>) ois.readObject();
+                ois.close();
+               // System.out.println(listTitle2.toString() + "\n");
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+
     }
 }
